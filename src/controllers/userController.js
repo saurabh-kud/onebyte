@@ -5,8 +5,8 @@ const jwt = require("jsonwebtoken");
 
 //user register
 const register = asyncHandler(async (req, res) => {
-  const { fname, lname, email, phone, password } = req.body;
-  if (!fname || !lname || !email || !phone || !password) {
+  const { name, email, phone, password } = req.body;
+  if (!name || !email || !phone || !password) {
     res.status(400);
     throw new Error("all field is required");
   }
@@ -18,8 +18,7 @@ const register = asyncHandler(async (req, res) => {
   try {
     const hasedPassword = await bcrypt.hash(password, 10);
     const user = await users.create({
-      fname,
-      lname,
+      name,
       email,
       phone,
       password: hasedPassword,
@@ -41,8 +40,7 @@ const register = asyncHandler(async (req, res) => {
         message: "User created successfully",
         data: {
           id: user.id,
-          fname: user.fname,
-          lname: user.lname,
+          name: user.name,
           email: user.email,
           phone: user.phone,
 
@@ -88,8 +86,8 @@ const login = asyncHandler(async (req, res) => {
       message: "User login successfull",
       data: {
         id: available.id,
-        fname: available.fname,
-        lname: available.lname,
+
+        name: available.name,
         email: available.email,
         phone: available.phone,
 
@@ -125,8 +123,8 @@ const profileUpdate = asyncHandler(async (req, res) => {
     res.status(401);
     throw new Error("token is invalid");
   }
-  const { fname, lname, email, phone, password, address } = req.body;
-  if (!fname || !lname || !email || !phone || !password || !address) {
+  const { name, email, phone, password, address } = req.body;
+  if (!name || !email || !phone || !password || !address) {
     res.status(400);
     throw new Error("all field is required");
   }
@@ -135,8 +133,7 @@ const profileUpdate = asyncHandler(async (req, res) => {
     const user = await users.findByIdAndUpdate(
       id,
       {
-        fname,
-        lname,
+        name,
         email,
         phone,
         password: hasedPassword,
@@ -150,8 +147,7 @@ const profileUpdate = asyncHandler(async (req, res) => {
         message: "User profile updated",
         data: {
           id: user._id,
-          fname: user.fname,
-          lname: user.lname,
+          name: user.name,
           email: user.email,
           phone: user.phone,
         },
